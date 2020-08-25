@@ -5,43 +5,32 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang/glog"
+	"im/src/frontier"
+	"im/src/im"
 	"runtime"
-	"wchatv1/src/frontier"
-	"wchatv1/src/im"
 )
 
 type news struct {
-	// 所有参与订阅的client，订阅列表
-	clients map[int]map[string]bool
-	// 所有频道的clients列表
-	clientsSubList   []map[string]frontier.Conn
-	clientsOnSubList []map[string]*list.List
-	caches           []chan *Message
-	events           []chan *Event
+	// 所有频道的conn列表
+	subList []map[string]*ConnList
+	// 消息缓存
+	caches []chan *Message
+
+	eventOnCleanSubscribe  []chan *EventCleanSubscribe
+	eventOnUploadSubscribe []chan *EventUploadSubscribe
+
+	clientsListOnSyncNews *list.List
 }
 
 func (n *news) OnInit() {
-	n.clients = make(map[int]map[string]bool)
-	n.clientsSubList = make([]map[string]frontier.Conn, runtime.NumCPU())
 	for i := 0; i < runtime.NumCPU(); i++ {
-		n.clientsSubList[i] = make(map[string]frontier.Conn)
-	}
-
-	n.caches = make([]chan *Message, runtime.NumCPU())
-	for i := 0; i < runtime.NumCPU(); i++ {
-		n.caches[i] = make(chan *Message)
-	}
-
-	// 处理新消息的推送
-	for i := 0; i < runtime.NumCPU(); i++ {
-		cache := n.caches[i]
-		clientsOnSubList := n.clientsOnSubList[i]
-		events := n.events[i]
-		go func(cache chan *Message, clientsOnSubList map[string]*list.List) {
+		go func(i int) {
+			subList := n.subList[i]
 			for {
 				select {
-				case message := <-cache:
-					clients, ok := clientsOnSubList[message.Kind]
+				case message := <-n.caches[i]:
+					// 处理新消息的推送
+					connList, ok := subList[message.Type]
 					if !ok {
 						continue
 					}
@@ -50,14 +39,30 @@ func (n *news) OnInit() {
 						glog.Errorln(err)
 						continue
 					}
-					for ele := clients.Front(); ele != nil; ele = ele.Next() {
+					for ele := connList.GetConnections().Front(); ele != nil; ele = ele.Next() {
 						conn := ele.Value.(frontier.Conn)
 						conn.Writer(j)
 					}
-				case event := <-
+				case event := <-n.eventOnUploadSubscribe[i]:
+					// 上传订阅列表
+					conn := event.Conn
+					for _, v := range event.SubscribeList {
+						if _, ok := subList[v]; !ok {
+							connList := &ConnList{}
+							connList.Init()
+							subList[v] = connList
+						}
+						subList[v].Push(conn)
+					}
+				case event := <-n.eventOnCleanSubscribe[i]:
+					// 移除连接的订阅
+					conn := event.Conn
+					for _, connList := range subList {
+						connList.Remove(conn)
+					}
 				}
 			}
-		}(cache, clientsOnSubList,events)
+		}(i)
 	}
 }
 
@@ -76,4 +81,30 @@ func (n *news) OnMessage(conn frontier.Conn, message *im.Message) {
 	default:
 		im.ResponseError(conn, message, fmt.Errorf("business api is not existsing"))
 	}
+}
+
+func (n *news) handler() {
+	n.clientsListOnSyncNews = list.New()
+
+	// 同步最新的消息
+	for i := 0; i < 100; i++ {
+		go func() {
+			for {
+				ele := n.clientsListOnSyncNews.Front()
+				if ele == nil {
+					continue
+				}
+
+			}
+		}()
+	}
+
+	for i:=0;i<100;i++{
+		go func() {
+			for{
+				cli :=
+			}
+		}()
+	}
+
 }

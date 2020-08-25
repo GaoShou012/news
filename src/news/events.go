@@ -1,13 +1,12 @@
 package news
 
-import "wchatv1/src/frontier"
+import "im/src/frontier"
 
-const (
-	EventInsert = iota
-	EventDelete
-)
+type EventUploadSubscribe struct {
+	Conn          frontier.Conn
+	SubscribeList []string
+}
 
-type Event struct {
-	Type int
+type EventCleanSubscribe struct {
 	Conn frontier.Conn
 }

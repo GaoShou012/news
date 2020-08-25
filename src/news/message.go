@@ -1,7 +1,7 @@
 package news
 
 type Message struct {
-	Kind    string
-	Title   string
-	Content string
+	Type string
+	Key  string
+	Val  string
 }

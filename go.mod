@@ -1,4 +1,4 @@
-module wchatv1
+module im
 
 go 1.14
 
