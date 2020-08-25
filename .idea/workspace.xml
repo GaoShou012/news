@@ -20,13 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a867b9f-931b-46cd-b8e5-9af5f90cdbcb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/im/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/im/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/events.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/events.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/news.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/news.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/frontier/conn.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/conn.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/frontier/frontier.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/frontier.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

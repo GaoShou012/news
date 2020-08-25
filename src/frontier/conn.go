@@ -3,13 +3,12 @@ package frontier
 import (
 	"net"
 	"time"
-	"wchatv1/src/netpoll"
+	"im/src/netpoll"
 )
 
 const (
 	connStateIsNothing = iota
 	connStateIsWorking
-	connStateIsClosing
 	connStateWasClosed
 )
 

@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"sync"
 	"time"
-	"wchatv1/src/ider"
-	"wchatv1/src/netpoll"
+	"im/src/ider"
+	"im/src/netpoll"
 )
 
 type Frontier struct {
