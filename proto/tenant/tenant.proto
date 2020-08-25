@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+//package proto.tenant;
+
+//option go_package = "wchat.im/proto/tenant;tenant";
+
+service TenantService {
+    // 校验租户key，以及租户状态
+    rpc Auth(AuthReq) returns(AuthRsp);
+    // 随机一个新的租户key
+    rpc RandomTenantKey(RandomTenantKeyReq) returns(RandomTenantKeyRsp);
+
+    // 创建租户
+    rpc Create(CreateReq) returns (CreateRsp);
+    // 修改租户状态
+    rpc Update(UpdateReq) returns (UpdateRsp);
+}
+
+message AuthReq{
+    string tenantCode = 1;
+    string tenantKey = 2;
+}
+message AuthRsp{
+    uint64 code = 1;
+    string message = 2;
+}
+
+message RandomTenantKeyReq {}
+message RandomTenantKeyRsp {
+    string tenantKey = 1;
+}
+
+message CreateReq{
+    string tenantCode = 1;
+    string tenantName = 2;
+    uint64 tenantState = 3;
+}
+message CreateRsp{
+    uint64 code = 1;
+    string message = 2;
+}
+
+message UpdateReq{
+    string tenantCode = 1;
+    string tenantName = 2;
+    uint64 state = 3;
+
+}
+
+
+
+
