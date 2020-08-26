@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto.room;
 
-option go_package = "wchat.im/proto/room;room";
+option go_package = "im/proto/room;room";
 
 // 通行证字段
 message PassToken {

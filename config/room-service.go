@@ -2,8 +2,8 @@ package config
 
 import (
 	"sync"
-	proto_room "wchatv1/proto/room"
-	"wchatv1/utils"
+	proto_room "im/proto/room"
+	"im/utils"
 )
 
 var (

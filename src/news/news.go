@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang/glog"
+	"im/config"
 	"im/src/frontier"
 	"im/src/im"
 	"runtime"
@@ -94,7 +95,6 @@ func (n *news) handler() {
 				if ele == nil {
 					continue
 				}
-
 			}
 		}()
 	}
@@ -102,7 +102,7 @@ func (n *news) handler() {
 	for i:=0;i<100;i++{
 		go func() {
 			for{
-				cli :=
+				cli := n.ta
 			}
 		}()
 	}

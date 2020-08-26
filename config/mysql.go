@@ -1,6 +1,6 @@
 package config
 
-import "wchatv1/utils"
+import "im/utils"
 
 var (
 	_           utils.MicroConfig = &mysqlConfig{}

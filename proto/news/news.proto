@@ -1,2 +1,31 @@
+syntax = "proto3";
 
+package proto.news;
+
+option go_package = "im/proto/news;news";
+
+
+service NewsService {
+    rpc GetNews(GetNewsReq) returns (GetNewsRsp);
+    rpc SetNews(SetNewsReq) returns (SetNewsRsp);
+}
+
+message NewsItem {
+    string key = 1;
+    string val = 2;
+    string id = 3;
+}
+message GetNewsReq {
+    repeated string keys = 1;
+    uint64 count = 2;
+}
+message GetNewsRsp {
+    repeated NewsItem items = 1;
+}
+
+message SetNewsReq {
+    string key = 1;
+    string val = 2;
+}
+message SetNewsRsp{}
 

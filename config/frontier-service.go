@@ -1,7 +1,7 @@
 package config
 
 import (
-	"wchatv1/utils"
+	"im/utils"
 )
 
 var (

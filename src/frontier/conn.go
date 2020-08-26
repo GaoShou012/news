@@ -1,9 +1,9 @@
 package frontier
 
 import (
+	"im/src/netpoll"
 	"net"
 	"time"
-	"im/src/netpoll"
 )
 
 const (
@@ -25,6 +25,7 @@ type Conn interface {
 	GetConnectionTime() time.Time
 	Broken()
 	IsBroken() bool
+	IsWorking() bool
 	GetConn() net.Conn
 	SetContext(ctx interface{})
 	GetContext() interface{}
@@ -60,6 +61,14 @@ type conn struct {
 
 func (c *conn) Init(writer ConnWriter, reader ConnReader, closer ConnCloser) {
 	c.ConnWriter, c.ConnReader, c.ConnCloser = writer, reader, closer
+}
+
+func (c *conn) IsWorking() bool {
+	if c.state == connStateIsWorking {
+		return true
+	} else {
+		return false
+	}
 }
 
 func (c *conn) Writer(message []byte) error {
