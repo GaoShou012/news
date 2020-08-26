@@ -20,7 +20,6 @@ type ConnPong func(conn net.Conn) error
 type Conn interface {
 	Init(writer ConnWriter, reader ConnReader, close ConnCloser)
 	GetId() int
-	GetFid() int
 	GetState() int
 	GetConnectionTime() time.Time
 	Broken()
@@ -29,6 +28,7 @@ type Conn interface {
 	GetConn() net.Conn
 	SetContext(ctx interface{})
 	GetContext() interface{}
+	Sender(message []byte)
 	SetUrl(url []byte)
 	GetUrl() []byte
 	Writer(message []byte) error
@@ -39,10 +39,9 @@ type Conn interface {
 var _ Conn = &conn{}
 
 type conn struct {
-	acl map[string]bool
+	frontier *Frontier
 
 	id     int
-	fid    int
 	state  int
 	broken bool
 	url    []byte
@@ -81,25 +80,12 @@ func (c *conn) Closer() error {
 	return c.ConnCloser(c.conn)
 }
 
-func (c *conn) Acl(key string) bool {
-	if c.acl == nil {
-		return false
-	}
-	_, ok := c.acl[key]
-	return ok
-}
-func (c *conn) SetAcl(acl map[string]bool) {
-	c.acl = acl
-}
-func (c *conn) GetAcl() map[string]bool {
-	return c.acl
+func (c *conn) Sender(message []byte) {
+	c.frontier.sender.push(c, message)
 }
 
 func (c *conn) GetId() int {
 	return c.id
-}
-func (c *conn) GetFid() int {
-	return c.fid
 }
 
 func (c *conn) GetState() int {

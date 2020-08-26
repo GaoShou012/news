@@ -1,109 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="3a867b9f-931b-46cd-b8e5-9af5f90cdbcb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitigore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitigore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/wchat_news.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/wchat_news.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/frontier/consumer.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/frontier/consumer.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/frontier/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/frontier/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/frontier/publisher.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/frontier/publisher.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/room-service/consumer.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/room-service/consumer.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/room-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/room-service/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/room-service/publishMessage.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/room-service/publishMessage.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/tenant-web-service/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/tenant-web-service/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/page.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/page.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/businessAcl.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/businessAcl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/frontier-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/frontier-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/kafka-cluster.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/kafka-cluster.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/mysql.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/redis-cluster.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/redis-cluster.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/room-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/room-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/tenant-web-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/tenant-web-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/room/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/room/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/tenant/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/tenant/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/rooms.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/rooms.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/tenants.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/tenants.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/message/message.proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto/message/message.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/news/news.proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto/news/news.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/room/room.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/room/room.pb.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/room/room.pb.micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/room/room.pb.micro.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/room/room.proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto/room/room.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/tenant/tenant.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/tenant/tenant.pb.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/tenant/tenant.pb.micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/tenant/tenant.pb.micro.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/tenant/tenant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto/tenant/tenant.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/router_admin.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router_admin.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/router_tenant.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router_tenant.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/acl.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/acl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/codec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/grpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/init.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/kafka.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/kafka.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/room.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/room_online_counter.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/room_online_counter.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/room/words.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/room/words.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/tenant/grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/services/tenant/grpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/acl/acl.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/acl/acl.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/frontier/conn.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/conn.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontier/connEvent.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/connEvent.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/frontier/frontier.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/frontier.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontier/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontier/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/init.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontier/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontier/protocol.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/protocol.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontier/protocol_ws.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/protocol_ws.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/frontier/init.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/frontier/sender.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontier/sender.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ider/idPool.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/ider/idPool.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ider/snowflake.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/ider/snowflake.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/im/acl.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/im/acl.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/im/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/im/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/im/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/im/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/epoll.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/epoll.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/epoll_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/epoll_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/handle.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/handle_stub.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/handle_stub.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/handle_unix.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/handle_unix.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/kqueue.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/kqueue.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/netpoll.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/netpoll.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/netpoll_epoll.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/netpoll_epoll.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/netpoll_kqueue.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/netpoll_kqueue.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/netpoll_stub.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/netpoll_stub.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/netpoll_unix_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/netpoll_unix_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/netpoll/util.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/netpoll/util.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/list/list.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/pubsub/list.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/news/events.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/events.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/news/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/init.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/news.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/news.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/news/sync.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/news/sync.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/parallel/parallel.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/parallel/parallel.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pubsub/pubsub.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/pubsub/pubsub.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/queue/queue.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/queue/queue.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/codec.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/codec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/context.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/context.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/def.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/def.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/event.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/init.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/response.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/room.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/rooms.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/rooms.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/ruledOut.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/ruledOut.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/sender.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/sender.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/room/syncRecord.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/room/syncRecord.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stream/stream.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/stream/stream.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/micro.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/mysql.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/mysql.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/redis.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/redis.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +42,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:\Go" />
+  <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -128,7 +53,6 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -136,19 +60,40 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
+    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
+    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="go.vgo" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pubsub" />
+    </key>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
+    <environment>
+      <map>
+        <entry key="GOPROXY" value="direct" />
+      </map>
+    </environment>
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
+    <state x="476" y="142" key="SettingsEditor" timestamp="1598447179663">
+      <screen x="0" y="23" width="1680" height="961" />
+    </state>
+    <state x="476" y="142" key="SettingsEditor/0.23.1680.961@0.23.1680.961" timestamp="1598447179663" />
     <state x="0" y="42" width="987" height="783" key="dock-window-1" timestamp="1598336493821">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

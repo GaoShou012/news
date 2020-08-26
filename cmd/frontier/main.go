@@ -100,7 +100,6 @@ func main() {
 	handler := &Handler{RoomService: config.RoomServiceConfig.ServiceClient()}
 	fr := &frontier.Frontier{
 		Id:               frontierId,
-		Ln:               ln,
 		Heartbeat:        true,
 		HeartbeatTimeout: 90,
 		Protocol:         protocol,

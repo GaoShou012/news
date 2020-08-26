@@ -3,19 +3,20 @@ package frontier
 import (
 	"bytes"
 	"container/list"
+	"context"
 	"fmt"
 	"github.com/golang/glog"
+	"im/src/ider"
+	"im/src/netpoll"
 	"net"
 	"runtime"
 	"sync"
 	"time"
-	"im/src/ider"
-	"im/src/netpoll"
 )
 
 type Frontier struct {
 	Id int
-	Ln net.Listener
+
 	Protocol
 	Handler
 
@@ -25,9 +26,14 @@ type Frontier struct {
 	// id pool
 	idPool *ider.IdPool
 
+	// tcp listener
+	ln net.Listener
+
 	// poller
 	desc   *netpoll.Desc
 	poller netpoll.Poller
+
+	sender *sender
 
 	// conn event's handler
 	// insert,update,delete
@@ -57,18 +63,30 @@ type Frontier struct {
 	}
 }
 
-func (f *Frontier) Init() error {
-	// 初始化poller
+func (f *Frontier) Init(ctx context.Context, addr string) error {
+	// init tcp listener
+	ln, err := (&net.ListenConfig{KeepAlive: time.Second * 60}).Listen(ctx, "tcp", addr)
+	if err != nil {
+		return err
+	}
+	f.ln = ln
+
+	// init poller
 	poller, err := netpoll.New(nil)
 	if err != nil {
 		return err
 	}
-	desc := netpoll.Must(netpoll.HandleListener(f.Ln, netpoll.EventRead|netpoll.EventOneShot))
+	desc := netpoll.Must(netpoll.HandleListener(ln, netpoll.EventRead|netpoll.EventOneShot))
 	f.poller = poller
 	f.desc = desc
 
+	// init id pool
 	f.idPool = &ider.IdPool{}
 	f.idPool.Init(1000000)
+
+	// init sender
+	f.sender = &sender{}
+	f.sender.init(4, 100000)
 
 	// 事件处理者
 	// 事件会存在异步情况
@@ -105,7 +123,7 @@ func (f *Frontier) Start() error {
 			f.poller.Resume(f.desc)
 		}()
 
-		netConn, err := f.Ln.Accept()
+		netConn, err := f.ln.Accept()
 		if err != nil {
 			return
 		}
@@ -114,12 +132,11 @@ func (f *Frontier) Start() error {
 	})
 }
 
-// Stop 停止长连接服务
 func (f *Frontier) Stop() error {
 	if err := f.poller.Stop(f.desc); err != nil {
 		return err
 	}
-	return f.Ln.Close()
+	return f.ln.Close()
 }
 
 func (f *Frontier) onAccept() {
@@ -135,8 +152,8 @@ func (f *Frontier) onAccept() {
 					continue
 				}
 				conn := &conn{
+					frontier:       f,
 					id:             id,
-					fid:            f.Id,
 					state:          0,
 					broken:         false,
 					url:            nil,

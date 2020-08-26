@@ -10,3 +10,7 @@ type EventUploadSubscribe struct {
 type EventCleanSubscribe struct {
 	Conn frontier.Conn
 }
+
+type EventDownloadSubscribe struct {
+	Conn frontier.Conn
+}
