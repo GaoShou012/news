@@ -1,7 +1,2 @@
 # goland
 .idea/
-
-/test/
-/cmd/frontier/main
-/cmd/room-service/main
-/cmd/web-service/main
