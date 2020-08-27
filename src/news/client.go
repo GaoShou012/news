@@ -8,11 +8,9 @@ import (
 
 type Client struct {
 	Conn          frontier.Conn
-	SubList       []string
-	LastMessageId map[string]string
+	IsCaching     bool
 	NewsCache     *list.List
-
-	IsCaching bool
+	LastMessageId map[string]string
 }
 
 func (c *Client) IsNewMessageId(key string, id string) bool {

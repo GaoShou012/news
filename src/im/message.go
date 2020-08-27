@@ -9,9 +9,11 @@ type Head struct {
 	Id           uint64 `json:"id"`
 	BusinessType string `json:"businessType"`
 	BusinessApi  string `json:"businessApi"`
+	Url          string `json:"path"`
+	Status       int    `json:"status"`
 }
 type Message struct {
-	Head `json:"head"`
+	Head Head        `json:"head"`
 	Body interface{} `json:"body"`
 }
 
