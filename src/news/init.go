@@ -18,7 +18,7 @@ func init() {
 type handler struct {
 	clientsAnchor map[int]*list.Element
 	clients       list.List
-
+	
 	addClient                   chan *Client
 	delClient                   chan *Client
 	clientsOnSwitchToDirectMode chan *Client
