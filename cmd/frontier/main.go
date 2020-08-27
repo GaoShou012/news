@@ -7,18 +7,17 @@ import (
 	"github.com/golang/glog"
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
-	"net"
+	uuid "github.com/satori/go.uuid"
+	"im/config"
+	proto_room "im/proto/room"
+	"im/src/frontier"
+	"im/src/im"
+	"im/src/news"
+	"im/utils"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-	"wchatv1/config"
-	proto_room "wchatv1/proto/room"
-	"wchatv1/src/frontier"
-	"wchatv1/src/ider"
-	"wchatv1/src/im"
-	"wchatv1/src/news"
-	"wchatv1/utils"
 )
 
 /*
@@ -26,12 +25,7 @@ import (
 	所以每个frontierId都必须要不一样
 */
 
-var (
-	frontierId int
-)
-
 var loadFlags = micro.Action(func(c *cli.Context) error {
-	frontierId = c.Int("frontier_id")
 	return nil
 })
 
@@ -66,30 +60,18 @@ func (h *Handler) OnClose(conn frontier.Conn) {
 
 func main() {
 	service := micro.NewService(
-		micro.Name(config.FrontierServiceConfig.ServiceName()),
-		micro.RegisterTTL(time.Second*30),
-		micro.RegisterInterval(time.Second*10),
-		micro.Flags(
-			&cli.IntFlag{Name: "frontier_id", Usage: "The frontier ID"},
-		),
+		micro.Flags(),
 	)
 	service.Init(loadFlags)
 
-	utils.Micro.InitV2()
+	utils.Micro.Init(service)
 	utils.Micro.LoadSource()
+	utils.Micro.LoadConfigMust(config.FrontierConfig)
 
-	fmt.Printf("Frontier ID = %d\n", frontierId)
-	// 初始化雪花算法
-	ider.InitSnowFlake(frontierId)
-
+	id := uuid.NewV4().String()
+	addr := service.Server().Options().Address
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
-	addr := service.Options().Server.Options().Address
-	ln, err := (&net.ListenConfig{KeepAlive: time.Second * 60}).Listen(ctx, "tcp", addr)
-	if err != nil {
-		panic(err)
-	}
 
 	protocol := &frontier.ProtocolWs{
 		WriterBufferSize:     1024,
@@ -99,19 +81,19 @@ func main() {
 	}
 	handler := &Handler{RoomService: config.RoomServiceConfig.ServiceClient()}
 	fr := &frontier.Frontier{
-		Id:               frontierId,
-		Heartbeat:        true,
-		HeartbeatTimeout: 90,
+		Id:               id,
+		Debug:            config.FrontierConfig.Debug,
+		HeartbeatTimeout: config.FrontierConfig.HeartbeatTimeout,
 		Protocol:         protocol,
-		Handler:          handler}
-	err = fr.Init()
-	if err != nil {
+		Handler:          handler,
+	}
+	if err := fr.Init(ctx, addr); err != nil {
 		panic(err)
 	}
-	err = fr.Start()
-	if err != nil {
+	if err := fr.Start(); err != nil {
 		panic(err)
 	}
+	go frontierConfigWatcher(fr)
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
@@ -127,5 +109,26 @@ func main() {
 			glog.Errorf("stop server error: %v", err)
 		}
 		break
+	}
+}
+
+func frontierConfigWatcher(fr *frontier.Frontier) {
+	watcher, err := utils.Micro.Config.Watch("micro", "config", "frontier")
+	if err != nil {
+		panic(err)
+	}
+	for {
+		val, err := watcher.Next()
+		if err != nil {
+			panic(err)
+		}
+		conf := val.Bytes()
+		fmt.Println("To update frontier config", string(conf))
+		err = json.Unmarshal(conf, config.FrontierConfig)
+		if err != nil {
+			panic(err)
+		}
+		fr.Debug = config.FrontierConfig.Debug
+		fr.HeartbeatTimeout = config.FrontierConfig.HeartbeatTimeout
 	}
 }

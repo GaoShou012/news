@@ -15,13 +15,11 @@ import (
 )
 
 type Frontier struct {
-	Id int
-
-	Protocol
-	Handler
-
-	Heartbeat        bool
+	Id               string
+	Debug            bool
 	HeartbeatTimeout int64
+	Protocol         Protocol
+	Handler          Handler
 
 	// id pool
 	idPool *ider.IdPool
@@ -125,6 +123,7 @@ func (f *Frontier) Start() error {
 
 		netConn, err := f.ln.Accept()
 		if err != nil {
+			glog.Errorln(err)
 			return
 		}
 
@@ -147,8 +146,8 @@ func (f *Frontier) onAccept() {
 
 				id, err := f.idPool.Get()
 				if err != nil {
-					netConn.Close()
 					glog.Errorln(err)
+					netConn.Close()
 					continue
 				}
 				conn := &conn{
@@ -210,6 +209,9 @@ func (f *Frontier) onEpoll() {
 							f.poller.Stop(conn.desc)
 							f.idPool.Put(conn.id)
 							f.eventPush(ConnEventTypeDelete, conn)
+							if f.Debug {
+								glog.Errorln(err)
+							}
 						}
 						if bytes.Equal(data, []byte("ping")) {
 							f.eventPush(ConnEventTypeUpdate, conn)
@@ -286,7 +288,7 @@ func (f *Frontier) eventHandler() {
 			for {
 				select {
 				case now := <-tick.C:
-					if f.Heartbeat == false {
+					if f.HeartbeatTimeout <= 0 {
 						return
 					}
 					deadline := now.Unix()
@@ -299,6 +301,9 @@ func (f *Frontier) eventHandler() {
 						conn := ele.Value.(*conn)
 						if conn.deadline > deadline {
 							break
+						}
+						if f.Debug {
+							fmt.Println("服务端关闭超时连接", conn)
 						}
 						f.Handler.OnClose(conn)
 						f.Protocol.OnClose(conn)

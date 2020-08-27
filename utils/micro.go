@@ -32,51 +32,19 @@ type microI struct {
 	}
 }
 
-func (m *microI) InitV2() {
-	service := micro.NewService()
-	service.Init()
-	m.Service = service
-
-	conf, err := microconfig.NewConfig()
-	if err != nil {
-		panic(err)
-	}
-	m.Config = conf
-	m.Source = microsourceetcd.NewSource(microsourceetcd.WithAddress(service.Options().Registry.Options().Addrs[0]))
-}
-
 func (m *microI) Init(service micro.Service) {
+	if service == nil {
+		service = micro.NewService()
+		service.Init()
+	}
 	m.Service = service
-	m.Config = service.Options().Config
-	m.Source = microsourceetcd.NewSource(microsourceetcd.WithAddress(service.Options().Registry.Options().Addrs[0]))
-	//fmt.Println("init etcd ", etcdAddr)
-	//
-	//m.etcd.addr = etcdAddr
-	//m.etcd.registry = etcd.NewRegistry(
-	//	registry.Addrs(m.etcd.addr),
-	//)
-	//
-	//conf, err := microconfig.NewConfig()
-	//if err != nil {
-	//	panic(err)
-	//}
-	//m.Config = conf
-	//
-	//m.Source = microsourceetcd.NewSource(microsourceetcd.WithAddress(m.etcd.addr))
-}
 
-func (m *microI) InitV1() {
-	fmt.Println("Init Micro")
 	conf, err := microconfig.NewConfig()
 	if err != nil {
 		panic(err)
 	}
 	m.Config = conf
-	m.Source = microsourceetcd.NewSource()
-}
-
-func (m *microI) GetEtcdRegistry() registry.Registry {
-	return m.etcd.registry
+	m.Source = microsourceetcd.NewSource(microsourceetcd.WithAddress(service.Options().Registry.Options().Addrs[0]))
 }
 
 func (m *microI) LoadSource() {
@@ -97,13 +65,13 @@ func (m *microI) LoadConfig(c MicroConfig) error {
 	}
 	return nil
 }
-func (m *microI) LoadConfigMust(c MicroConfig){
-	fmt.Println("Loading Config",c.ConfigKey())
-	val := m.Config.Get("micro","config",c.ConfigKey())
-	if bytes.Equal(val.Bytes(),[]byte("null")) {
+func (m *microI) LoadConfigMust(c MicroConfig) {
+	fmt.Println("Loading Config", c.ConfigKey())
+	val := m.Config.Get("micro", "config", c.ConfigKey())
+	if bytes.Equal(val.Bytes(), []byte("null")) {
 		panic(fmt.Errorf("%s is null", c.ConfigKey()))
 	}
-	if err := json.Unmarshal(val.Bytes(),c); err != nil {
+	if err := json.Unmarshal(val.Bytes(), c); err != nil {
 		panic(err)
 	}
 }

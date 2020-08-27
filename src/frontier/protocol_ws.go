@@ -1,6 +1,7 @@
 package frontier
 
 import (
+	"fmt"
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 	"io/ioutil"
@@ -77,25 +78,55 @@ func (p *ProtocolWs) OnInit(f *Frontier) {
 }
 
 func (p *ProtocolWs) OnAccept(conn Conn) error {
-	_, err := ws.Upgrader{
-		ReadBufferSize:  p.ReaderBufferSize,
-		WriteBufferSize: p.WriterBufferSize,
-		Protocol:        nil,
-		ProtocolCustom:  nil,
-		Extension:       nil,
-		ExtensionCustom: nil,
-		Header:          nil,
-		OnRequest: func(uri []byte) error {
-			conn.SetUrl(uri)
+	if p.frontier.Debug {
+		_, err := ws.Upgrader{
+			ReadBufferSize:  p.ReaderBufferSize,
+			WriteBufferSize: p.WriterBufferSize,
+			Protocol:        nil,
+			ProtocolCustom:  nil,
+			Extension:       nil,
+			ExtensionCustom: nil,
+			Header:          nil,
+			OnRequest: func(uri []byte) error {
+				conn.SetUrl(uri)
+				fmt.Println("conn uri:", string(uri))
+				return nil
+			},
+			OnHost: func(host []byte) error {
+				fmt.Println("conn host", string(host))
+				return nil
+			},
+			OnHeader: func(key, value []byte) error {
+				fmt.Println("conn header", key, string(value))
+				return nil
+			},
+			OnBeforeUpgrade: nil,
+		}.Upgrade(conn.GetConn())
+		if err != nil {
 			return nil
-		},
-		OnHost:          nil,
-		OnHeader:        nil,
-		OnBeforeUpgrade: nil,
-	}.Upgrade(conn.GetConn())
-	if err != nil {
-		return err
+		}
+	} else {
+		_, err := ws.Upgrader{
+			ReadBufferSize:  p.ReaderBufferSize,
+			WriteBufferSize: p.WriterBufferSize,
+			Protocol:        nil,
+			ProtocolCustom:  nil,
+			Extension:       nil,
+			ExtensionCustom: nil,
+			Header:          nil,
+			OnRequest: func(uri []byte) error {
+				conn.SetUrl(uri)
+				return nil
+			},
+			OnHost:          nil,
+			OnHeader:        nil,
+			OnBeforeUpgrade: nil,
+		}.Upgrade(conn.GetConn())
+		if err != nil {
+			return err
+		}
 	}
+
 	conn.Init(p.writer, p.reader, p.closer)
 	return nil
 }
