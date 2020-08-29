@@ -1,9 +1,18 @@
 package news
 
-import "im/src/frontier"
+import (
+	"im/src/frontier"
+	"im/src/im"
+)
+
+type UploadSubList struct {
+	Client  *Client
+	SubList []string
+}
 
 type EventUploadSubscribe struct {
-	Client        *Client
+	Conn          frontier.Conn
+	Message       *im.Message
 	SubscribeList []string
 }
 

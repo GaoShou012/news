@@ -6,14 +6,12 @@ import (
 )
 
 type Head struct {
-	Id           uint64 `json:"id"`
-	BusinessType string `json:"businessType"`
-	BusinessApi  string `json:"businessApi"`
-	Url          string `json:"path"`
-	Status       int    `json:"status"`
+	Id     uint64 `json:"id"`
+	Status int    `json:"status"`
+	Api    string `json:"api"`
 }
 type Message struct {
-	Head Head        `json:"head"`
+	Head *Head       `json:"head"`
 	Body interface{} `json:"body"`
 }
 
@@ -51,3 +49,4 @@ func IsNewMessageId(oldId string, newId string) bool {
 
 	return true
 }
+

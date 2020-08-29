@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang/glog"
-	"im/config"
 	"im/src/frontier"
 	"im/src/im"
 	"runtime"
@@ -67,15 +66,27 @@ func (n *news) OnInit() {
 	}
 }
 
+func (n *news) OnOpen(conn frontier.Conn) {
+	HandlerAgent.AddConn(conn)
+}
+func (n *news) OnClose(conn frontier.Conn) {
+	HandlerAgent.DelConn(conn)
+}
 func (n *news) OnMessage(conn frontier.Conn, message *im.Message) {
 	switch message.Head.BusinessApi {
 	case "subscribe.list.upload":
-		m, ok := message.Body.(map[string]map[string]bool)
+		m, ok := message.Body.([]string)
 		if !ok {
 			im.ResponseError(conn, message, fmt.Errorf("订阅列表格式错误"))
 			return
 		}
+		if len(m) > 255 {
+			im.ResponseError(conn,message,fmt.Errorf(""))
+		}
 		// 检验订阅列表是否有效
+
+		// 添加到处理程序
+		HandlerAgent.UploadSubscribeList(conn, message)
 		break
 	case "subscribe.list.download":
 		break
@@ -99,9 +110,9 @@ func (n *news) handler() {
 		}()
 	}
 
-	for i:=0;i<100;i++{
+	for i := 0; i < 100; i++ {
 		go func() {
-			for{
+			for {
 				cli := n.ta
 			}
 		}()
