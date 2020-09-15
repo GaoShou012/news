@@ -2,120 +2,106 @@ package news
 
 import (
 	"container/list"
-	"encoding/json"
-	"fmt"
 	"github.com/golang/glog"
+	"google.golang.org/protobuf/proto"
+	proto_news "im/proto/news"
 	"im/src/frontier"
-	"im/src/im"
-	"runtime"
 )
 
 type news struct {
-	// 所有频道的conn列表
-	subList []map[string]*ConnList
-	// 消息缓存
-	caches []chan *Message
+	clients map[int]*Client
 
-	eventOnCleanSubscribe  []chan *EventCleanSubscribe
-	eventOnUploadSubscribe []chan *EventUploadSubscribe
+	onNews      chan *proto_news.NewsItem
+	onLeave     chan frontier.Conn
+	onSubscribe chan *EventOnSubscribe
 
-	clientsListOnSyncNews *list.List
+	channels map[string]*list.List
+	anchors  map[int]map[string]*list.Element // clientId.channelName.ele
+}
+
+func (n *news) addSubscribe(cli *Client, channels []string) {
+	clientId := cli.Conn.GetId()
+
+	for _, channelName := range channels {
+		// If the channel is not exists then to create the channel
+		channel, ok := n.channels[channelName]
+		if !ok {
+			channel = list.New()
+			n.channels[channelName] = channel
+		}
+
+		// Add the client to the client list of the channel
+		anchor := channel.PushBack(cli)
+
+		// Save the anchor to the anchor list of the client
+		n.anchors[clientId][channelName] = anchor
+	}
+}
+func (n *news) delSubscribe(clientId int) {
+	anchorsOfClient, ok := n.anchors[clientId]
+	if !ok {
+		return
+	}
+	for channelName, anchor := range anchorsOfClient {
+		n.channels[channelName].Remove(anchor)
+	}
 }
 
 func (n *news) OnInit() {
-	for i := 0; i < runtime.NumCPU(); i++ {
-		go func(i int) {
-			subList := n.subList[i]
-			for {
-				select {
-				case message := <-n.caches[i]:
-					// 处理新消息的推送
-					connList, ok := subList[message.Type]
-					if !ok {
-						continue
+	go func() {
+		for {
+			select {
+			case event := <-n.onSubscribe:
+				clientId := event.Conn.GetId()
+
+				cli, ok := n.clients[event.Conn.GetId()]
+				if !ok {
+					cli = &Client{
+						Conn:      event.Conn,
+						IsCaching: true,
+						News:      make(map[string]*proto_news.NewsItem),
 					}
-					j, err := json.Marshal(message)
-					if err != nil {
-						glog.Errorln(err)
-						continue
-					}
-					for ele := connList.GetConnections().Front(); ele != nil; ele = ele.Next() {
-						conn := ele.Value.(frontier.Conn)
-						conn.Writer(j)
-					}
-				case event := <-n.eventOnUploadSubscribe[i]:
-					// 上传订阅列表
-					conn := event.Conn
-					for _, v := range event.SubscribeList {
-						if _, ok := subList[v]; !ok {
-							connList := &ConnList{}
-							connList.Init()
-							subList[v] = connList
-						}
-						subList[v].Push(conn)
-					}
-				case event := <-n.eventOnCleanSubscribe[i]:
-					// 移除连接的订阅
-					conn := event.Conn
-					for _, connList := range subList {
-						connList.Remove(conn)
-					}
+
+					// map[string]*list.Element
+					// That is anchors of channel of clients
+					n.anchors[clientId] = make(map[string]*list.Element)
+					n.clients[clientId] = cli
 				}
-			}
-		}(i)
-	}
-}
-
-func (n *news) OnOpen(conn frontier.Conn) {
-	HandlerAgent.AddConn(conn)
-}
-func (n *news) OnClose(conn frontier.Conn) {
-	HandlerAgent.DelConn(conn)
-}
-func (n *news) OnMessage(conn frontier.Conn, message *im.Message) {
-	switch message.Head.BusinessApi {
-	case "subscribe.list.upload":
-		m, ok := message.Body.([]string)
-		if !ok {
-			im.ResponseError(conn, message, fmt.Errorf("订阅列表格式错误"))
-			return
-		}
-		if len(m) > 255 {
-			im.ResponseError(conn,message,fmt.Errorf(""))
-		}
-		// 检验订阅列表是否有效
-
-		// 添加到处理程序
-		HandlerAgent.UploadSubscribeList(conn, message)
-		break
-	case "subscribe.list.download":
-		break
-	default:
-		im.ResponseError(conn, message, fmt.Errorf("business api is not existsing"))
-	}
-}
-
-func (n *news) handler() {
-	n.clientsListOnSyncNews = list.New()
-
-	// 同步最新的消息
-	for i := 0; i < 100; i++ {
-		go func() {
-			for {
-				ele := n.clientsListOnSyncNews.Front()
-				if ele == nil {
+				n.delSubscribe(clientId)
+				n.addSubscribe(cli, event.Message.Channels)
+				break
+			case conn := <-n.onLeave:
+				clientId := conn.GetId()
+				n.delSubscribe(clientId)
+				break
+			case message := <-n.onNews:
+				data, err := proto.Marshal(message)
+				if err != nil {
+					glog.Errorln(err)
 					continue
 				}
+				for _, cli := range n.clients {
+					if cli.IsNewMessageId(message) == false {
+						continue
+					}
+					cli.Conn.Sender(data)
+				}
+				break
 			}
-		}()
-	}
+		}
+	}()
+}
 
-	for i := 0; i < 100; i++ {
-		go func() {
-			for {
-				cli := n.ta
-			}
-		}()
+func (n *news) OnSubscribe(conn frontier.Conn, subscribe *proto_news.Subscribe) {
+	event := &EventOnSubscribe{
+		Conn:    conn,
+		Message: subscribe,
 	}
-
+	n.onSubscribe <- event
+}
+func (n *news) OnLeave(conn frontier.Conn) {
+	n.onLeave <- conn
+}
+func (n *news) OnNews(item *proto_news.NewsItem) {
+	n.onNews <- item
 }

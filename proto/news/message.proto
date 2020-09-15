@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package proto.news;
+
+option go_package = "im/proto/news;news";
+
+message Subscribe {
+    repeated string channels = 1;
+}

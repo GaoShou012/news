@@ -1,40 +1,25 @@
 package news
 
 import (
-	"container/list"
+	proto_message "im/proto/message"
+	proto_news "im/proto/news"
 	"im/src/frontier"
 )
 
 type Client struct {
 	Conn      frontier.Conn
 	IsCaching bool
-	NewsCache *list.List
-	//News      *News
-	Channels  *Channels
+	News      map[string]*proto_news.NewsItem
 }
 
-//func (c *Client) IsNewMessageId(key string, id string) bool {
-//	lastMessageId, ok := c.LastMessageId[key]
-//	if !ok {
-//		return true
-//	}
-//	return im.IsNewMessageId(lastMessageId, id)
-//}
-//func (c *Client) SetLastMessageId(key string, id string) {
-//	c.LastMessageId[key] = id
-//}
-
-func (c *Client) NewsCachePush(item *Item) {
-	c.NewsCache.PushBack(item)
-}
-func (c *Client) NewsCachePop() *Item {
-	ele := c.NewsCache.Front()
-	if ele == nil {
-		return nil
+func (c *Client) IsNewMessageId(message *proto_news.NewsItem) bool {
+	item, ok := c.News[message.Key]
+	if !ok {
+		return true
 	}
-	c.NewsCache.Remove(ele)
-	return ele.Value.(*Item)
+	return proto_message.IsNewMessageId(item.Id, message.Id)
 }
+
 func (c *Client) Sender(message []byte) {
 	c.Conn.Sender(message)
 }

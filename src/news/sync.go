@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+
+/*
+	把订阅列表，同步到微服务
+	并且通过kafka返回响应的消息
+*/
+
+
 type Sync struct {
 	clients *list.List
 	task    chan *Client

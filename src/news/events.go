@@ -1,6 +1,7 @@
 package news
 
 import (
+	proto_news "im/proto/news"
 	"im/src/frontier"
 	"im/src/im"
 )
@@ -8,6 +9,11 @@ import (
 type UploadSubList struct {
 	Client  *Client
 	SubList []string
+}
+
+type EventOnSubscribe struct {
+	Conn    frontier.Conn
+	Message *proto_news.Subscribe
 }
 
 type EventUploadSubscribe struct {
