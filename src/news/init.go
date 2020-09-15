@@ -1,7 +1,5 @@
 package news
 
-var HandlerAgent *handlerAgent
-
 var Agent *agent
 
 func init() {
