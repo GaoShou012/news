@@ -13,6 +13,7 @@ import (
 	"im/config"
 	proto_im "im/proto/im"
 	"im/src/news"
+	_ "im/src/news"
 	"im/utils"
 	"log"
 	"os"

@@ -18,7 +18,9 @@ func (a *agent) OnInit() {
 	a.parallel = runtime.NumCPU()
 	a.handlers = make([]*handler, a.parallel)
 	for i := 0; i < a.parallel; i++ {
-		a.handlers[i].OnInit()
+		h := &handler{}
+		h.OnInit()
+		a.handlers[i] = h
 	}
 }
 func (a *agent) OnMessage(conn frontier.Conn, message *proto_im.Message) {

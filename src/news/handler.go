@@ -48,6 +48,12 @@ func (n *handler) delSubscribe(clientId int) {
 }
 
 func (n *handler) OnInit() {
+	chanSize := 100000
+	n.onNews = make(chan *proto_news.NewsItem, chanSize)
+	n.onSubscribe = make(chan *EventOnSubscribe, chanSize)
+	n.onLeave = make(chan frontier.Conn, chanSize)
+	n.channels = make(map[string]*list.List)
+	n.anchors = make(map[int]map[string]*list.Element)
 	go func() {
 		for {
 			select {
