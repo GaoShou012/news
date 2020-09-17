@@ -3,6 +3,7 @@ module im
 go 1.14
 
 require (
+	github.com/GaoShou012/frontier v0.0.12
 	github.com/Shopify/sarama v1.27.0
 	github.com/alangpierce/go-forceexport v0.0.0-20160317203124-8f1d6941cd75 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
@@ -80,6 +81,7 @@ require (
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/prometheus/client_golang v1.7.0
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/procfs v0.1.3 // indirect
 	github.com/soheilhy/cmux v0.1.4 // indirect
@@ -91,7 +93,7 @@ require (
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc // indirect
-	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed
+	golang.org/x/sys v0.0.0-20200828081204-131dc92a58d5
 	golang.org/x/text v0.3.3 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/genproto v0.0.0-20200815001618-f69a88009b70 // indirect

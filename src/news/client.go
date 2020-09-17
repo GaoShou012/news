@@ -1,9 +1,9 @@
 package news
 
 import (
+	"github.com/GaoShou012/frontier"
 	proto_message "im/proto/message"
 	proto_news "im/proto/news"
-	"im/src/frontier"
 )
 
 type Client struct {

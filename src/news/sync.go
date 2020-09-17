@@ -1,6 +1,7 @@
 package news
 
 import (
+	"fmt"
 	proto_news "im/proto/news"
 	"runtime"
 )
@@ -16,7 +17,7 @@ func (s *syncRecord) init() {
 		go func() {
 			for {
 				job := <-s.jobs
-
+				fmt.Println(job)
 			}
 		}()
 	}

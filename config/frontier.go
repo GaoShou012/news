@@ -2,7 +2,6 @@ package config
 
 import (
 	"im/utils"
-	"time"
 )
 
 var (
@@ -11,11 +10,10 @@ var (
 )
 
 type frontierConfig struct {
-	Debug            bool
-	HeartbeatTimeout int64
-	WriterTimeout    time.Duration
-	ReaderTimeout    time.Duration
-	AcceptProcNum    int
+	LogLevel         int   `json:"logLevel"`
+	HeartbeatTimeout int64 `json:"heartbeatTimeout"`
+	WriterBufferSize int   `json:"writerBufferSize"`
+	ReaderBufferSize int   `json:"readerBufferSize"`
 }
 
 func (c *frontierConfig) ConfigKey() string {

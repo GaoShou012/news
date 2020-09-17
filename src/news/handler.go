@@ -2,10 +2,10 @@ package news
 
 import (
 	"container/list"
+	"github.com/GaoShou012/frontier"
 	"github.com/golang/glog"
 	"google.golang.org/protobuf/proto"
 	proto_news "im/proto/news"
-	"im/src/frontier"
 )
 
 type handler struct {

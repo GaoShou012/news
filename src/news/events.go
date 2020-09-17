@@ -1,8 +1,8 @@
 package news
 
 import (
+	"github.com/GaoShou012/frontier"
 	proto_news "im/proto/news"
-	"im/src/frontier"
 )
 
 type EventOnSubscribe struct {

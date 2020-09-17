@@ -64,6 +64,8 @@ service RoomService {
 
     // 读取消息记录
     rpc Record(RecordReq) returns (RecordRsp);
+
+    rpc Info() returns ();
 }
 
 message MakePassTokenReq {
@@ -142,4 +144,12 @@ message RecordReq {
 }
 message RecordRsp {
     repeated Message record = 1;
+}
+
+message InfoReq {
+    string tenantCode = 1;
+    string roomCode = 2;
+}
+message InfoRsp {
+    uint64 count = 1;
 }

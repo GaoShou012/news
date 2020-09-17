@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package proto.im;
+
+option go_package = "wchatv1/proto/im;im";
+
+message Conn {
+    uint64 Id = 1;
+    string Uuid = 2;
+}
+
+message State {
+    uint64 code = 1;
+    string desc = 2;
+}
+
+message Head {
+    string Path = 1;
+}
+
+message Message {
+    Head Head = 1;
+    bytes Body = 2;
+}
+
