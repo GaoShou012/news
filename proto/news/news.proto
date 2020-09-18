@@ -10,11 +10,6 @@ service NewsService {
     rpc SetNews(SetNewsReq) returns (SetNewsRsp);
 }
 
-message NewsItem {
-    string key = 1;
-    string val = 2;
-    string id = 3;
-}
 message GetNewsReq {
     repeated string keys = 1;
     uint64 count = 2;

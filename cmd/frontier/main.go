@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/GaoShou012/frontier"
-	sarama_cluster "github.com/bsm/sarama-cluster"
 	"github.com/gobwas/ws"
 	"github.com/golang/glog"
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
 	uuid "github.com/satori/go.uuid"
+	"google.golang.org/protobuf/proto"
 	"im/config"
 	proto_im "im/proto/im"
+	proto_news "im/proto/news"
 	"im/src/news"
 	_ "im/src/news"
 	"im/utils"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -118,53 +118,71 @@ func main() {
 		}
 	}()
 
-	{
-		conf := sarama_cluster.NewConfig()
-		conf.Consumer.Offsets.AutoCommit.Enable = true
-		conf.Consumer.Offsets.AutoCommit.Interval = time.Second
-		conf.Consumer.Offsets.CommitInterval = time.Second
-		conf.Consumer.Return.Errors = true
-		conf.Group.Return.Notifications = true
+	//{
+	//	conf := sarama_cluster.NewConfig()
+	//	conf.Consumer.Offsets.AutoCommit.Enable = true
+	//	conf.Consumer.Offsets.AutoCommit.Interval = time.Second
+	//	conf.Consumer.Offsets.CommitInterval = time.Second
+	//	conf.Consumer.Return.Errors = true
+	//	conf.Group.Return.Notifications = true
+	//
+	//	addr, topics := config.KafkaClusterConfig.Addr, []string{config.RoomServiceConfig.Topic}
+	//	consumer, err := sarama_cluster.NewConsumer(addr, fmt.Sprintf("%d", 1), topics, conf)
+	//	if err != nil {
+	//		panic(err)
+	//	}
+	//
+	//	// trap SIGINT to trigger a shutdown.
+	//	signals := make(chan os.Signal, 1)
+	//	signal.Notify(signals, os.Interrupt)
+	//
+	//	// consume errors
+	//	go func() {
+	//		for err := range consumer.Errors() {
+	//			log.Printf("Error: %s\n", err.Error())
+	//		}
+	//	}()
+	//
+	//	// consume notifications
+	//	go func() {
+	//		for ntf := range consumer.Notifications() {
+	//			log.Printf("Rebalanced: %+v\n", ntf)
+	//		}
+	//	}()
+	//
+	//	// consume messages, watch signals
+	//	go func() {
+	//		for {
+	//			select {
+	//			case message, ok := <-consumer.Messages():
+	//				if ok {
+	//					//fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
+	//					consumer.MarkOffset(message, "") // mark message as processed
+	//				}
+	//			case <-signals:
+	//				return
+	//			}
+	//		}
+	//	}()
+	//}
 
-		addr, topics := config.KafkaClusterConfig.Addr, []string{config.RoomServiceConfig.Topic}
-		consumer, err := sarama_cluster.NewConsumer(addr, fmt.Sprintf("%d", 1), topics, conf)
-		if err != nil {
-			panic(err)
+	go func() {
+		ticker := time.NewTicker(time.Second)
+		for {
+			now := <-ticker.C
+			msg := &proto_news.NewsItem{
+				Key: "channela",
+				Val: "12313",
+				Id:  fmt.Sprintf("%d-0", now.Unix()),
+			}
+			data, err := proto.Marshal(msg)
+			if err != nil {
+				glog.Errorln(err)
+				os.Exit(1)
+			}
+			news.Agent.OnNews(data)
 		}
-
-		// trap SIGINT to trigger a shutdown.
-		signals := make(chan os.Signal, 1)
-		signal.Notify(signals, os.Interrupt)
-
-		// consume errors
-		go func() {
-			for err := range consumer.Errors() {
-				log.Printf("Error: %s\n", err.Error())
-			}
-		}()
-
-		// consume notifications
-		go func() {
-			for ntf := range consumer.Notifications() {
-				log.Printf("Rebalanced: %+v\n", ntf)
-			}
-		}()
-
-		// consume messages, watch signals
-		go func() {
-			for {
-				select {
-				case message, ok := <-consumer.Messages():
-					if ok {
-						//fmt.Fprintf(os.Stdout, "%s/%d/%d\t%s\t%s\n", msg.Topic, msg.Partition, msg.Offset, msg.Key, msg.Value)
-						consumer.MarkOffset(message, "") // mark message as processed
-					}
-				case <-signals:
-					return
-				}
-			}
-		}()
-	}
+	}()
 
 	f := &frontier.Frontier{
 		Id:             id,

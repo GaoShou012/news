@@ -4,6 +4,12 @@ package proto.news;
 
 option go_package = "im/proto/news;news";
 
+message NewsItem {
+    string key = 1;
+    string val = 2;
+    string id = 3;
+}
+
 message Subscribe {
     repeated string channels = 1;
 }

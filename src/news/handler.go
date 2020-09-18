@@ -3,8 +3,6 @@ package news
 import (
 	"container/list"
 	"github.com/GaoShou012/frontier"
-	"github.com/golang/glog"
-	"google.golang.org/protobuf/proto"
 	proto_news "im/proto/news"
 )
 
@@ -34,7 +32,12 @@ func (n *handler) addSubscribe(cli *Client, channels []string) {
 		anchor := channel.PushBack(cli)
 
 		// Save the anchor to the anchor list of the client
-		n.anchors[clientId][channelName] = anchor
+		anchorsOfClient, ok := n.anchors[clientId]
+		if !ok {
+			anchorsOfClient = make(map[string]*list.Element)
+			n.anchors[clientId] = anchorsOfClient
+		}
+		anchorsOfClient[channelName] = anchor
 	}
 }
 func (n *handler) delSubscribe(clientId int) {
@@ -42,13 +45,16 @@ func (n *handler) delSubscribe(clientId int) {
 	if !ok {
 		return
 	}
+
 	for channelName, anchor := range anchorsOfClient {
 		n.channels[channelName].Remove(anchor)
 	}
+	delete(n.anchors, clientId)
 }
 
 func (n *handler) OnInit() {
 	chanSize := 100000
+	n.clients = make(map[int]*Client)
 	n.onNews = make(chan *proto_news.NewsItem, chanSize)
 	n.onSubscribe = make(chan *EventOnSubscribe, chanSize)
 	n.onLeave = make(chan frontier.Conn, chanSize)
@@ -58,12 +64,14 @@ func (n *handler) OnInit() {
 		for {
 			select {
 			case event := <-n.onSubscribe:
-				clientId := event.Conn.GetId()
+				clientId, conn, message := event.Conn.GetId(), event.Conn, event.Message
+
+
 
 				cli, ok := n.clients[event.Conn.GetId()]
 				if !ok {
 					cli = &Client{
-						Conn:      event.Conn,
+						Conn:      conn,
 						IsCaching: true,
 						News:      make(map[string]*proto_news.NewsItem),
 					}
@@ -75,21 +83,21 @@ func (n *handler) OnInit() {
 				}
 				n.delSubscribe(clientId)
 				n.addSubscribe(cli, event.Message.Channels)
+
+				Agent.onSubscribe <- message.Channels
 				break
 			case conn := <-n.onLeave:
 				clientId := conn.GetId()
 				n.delSubscribe(clientId)
+				delete(n.clients, clientId)
 				break
 			case message := <-n.onNews:
-				data, err := proto.Marshal(message)
-				if err != nil {
-					glog.Errorln(err)
-					continue
-				}
+				data := proto_news.Response(message)
 				for _, cli := range n.clients {
 					if cli.IsNewMessageId(message) == false {
 						continue
 					}
+					cli.SetMessageId(message)
 					cli.Conn.Sender(data)
 				}
 				break
