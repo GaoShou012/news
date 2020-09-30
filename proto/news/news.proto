@@ -4,23 +4,41 @@ package proto.news;
 
 option go_package = "im/proto/news;news";
 
+import "proto/news/message.proto";
 
 service NewsService {
+    rpc Sub(SubReq) returns (SubRsp);
+    rpc Cancel(CancelReq)returns (CancelRsp);
+
+    rpc GetSubList(GetSubListReq) returns (GetSubListRsp);
+
     rpc GetNews(GetNewsReq) returns (GetNewsRsp);
-    rpc SetNews(SetNewsReq) returns (SetNewsRsp);
+}
+
+message SubReq {
+    string frontierId = 1;
+    repeated string channels = 2;
+}
+message SubRsp {
+    repeated NewsItem items = 1;
+}
+message CancelReq {
+    string frontierId = 1;
+    repeated string channels = 2;
+}
+message CancelRsp {}
+
+message GetSubListReq {
+    string channelName = 1;
+}
+message GetSubListRsp {
+    repeated string subscribers = 1;
 }
 
 message GetNewsReq {
     repeated string keys = 1;
-    uint64 count = 2;
 }
 message GetNewsRsp {
     repeated NewsItem items = 1;
 }
-
-message SetNewsReq {
-    string key = 1;
-    string val = 2;
-}
-message SetNewsRsp{}
 

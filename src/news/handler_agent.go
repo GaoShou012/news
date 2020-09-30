@@ -14,13 +14,14 @@ type agent struct {
 	parallel int
 	handlers []*handler
 
-	connections     map[int]frontier.Conn
-	subscribeOnConn map[int][]string
+	channels map[string]int
 
-	mutex       sync.Mutex
-	clients     map[int]*Client
-	onSubscribe chan []string
-	onCancel    chan []string
+	mutex          sync.Mutex
+	connections    map[int]frontier.Conn
+	connectionsSub map[int][]string
+	onSubscribe    chan []string
+	onCancelSub    chan []string
+	onPulling      chan []string
 }
 
 func (a *agent) OnInit() {
@@ -32,14 +33,60 @@ func (a *agent) OnInit() {
 		a.handlers[i] = h
 	}
 
-	for {
-		select {
-		case subList := <-a.onSubscribe:
+	a.channels = make(map[string]int)
+	a.connections = make(map[int]frontier.Conn)
+	a.connectionsSub = make(map[int][]string)
+	a.onSubscribe = make(chan []string)
+	a.onCancelSub = make(chan []string)
 
-			break
-		case subList := <-a.onCancel:
-			break
+	go func() {
+		// 理论上任务顺序是，先订阅，后取消。
+		// 实际上有可能任务执行的时候，订阅事件还没有被消费，取消事件就已经优先消费
+		// 所以在取消事件中 count-- 如果是 -1 不会产生取消任务，如果是 0 就产生
+		// 如果取消事件中count-- equal -1 订阅事件在还排队中，所以，在订阅处理中，count++ 的时候，需要 1 才产生订阅任务
+		// 最终结果 count-- equal -1 不产生任务，count++ equal 0 不产生任务
+		// 必须是： count-- equal 0 生成任务，count++ equal 1 产生任务
+		for {
+			select {
+			case subList := <-a.onSubscribe:
+				for _, channelName := range subList {
+					count, ok := a.channels[channelName]
+					if !ok {
+						count = 0
+					}
+					count++
+					a.channels[channelName] = count
+
+					if count == 1 {
+						// 订阅
+					}
+				}
+				break
+			case subList := <-a.onCancelSub:
+				for _, channelName := range subList {
+					count, ok := a.channels[channelName]
+					if !ok {
+						count = 0
+					}
+					count--
+					a.channels[channelName] = count
+
+					if count == 0 {
+						// 取消订阅
+					}
+				}
+				break
+			}
 		}
+	}()
+
+	for i := 0; i < runtime.NumCPU()*10; i++ {
+		go func() {
+			for {
+				task := <-a.onPulling
+
+			}
+		}()
 	}
 }
 func (a *agent) OnMessage(conn frontier.Conn, message *proto_im.Message) {
@@ -61,45 +108,43 @@ func (a *agent) OnMessage(conn frontier.Conn, message *proto_im.Message) {
 	for _, channelName := range msg.Channels {
 		_, ok := temp[channelName]
 		if ok {
-			break
+			return
 		}
 	}
 
 	a.mutex.Lock()
 	defer a.mutex.Unlock()
 
-	// 如果客户端不存在，创建客户端对象，订阅新的频道
-	// 如果客户端已经存在，取消先前的订阅，然后，订阅新的频道
-	clientId := conn.GetId()
-	cli, ok := a.clients[clientId]
-	if ok {
-		a.onCancel <- cli.Subscribe
+	// 如果终端连接不存在，保存连接，订阅新的频道
+	// 如果终端连接经存在，取消先前的订阅，然后，订阅新的频道
+	connId := conn.GetId()
+	_, ok := a.connections[connId]
+	if !ok {
+		a.connections[connId] = conn
 	} else {
-		cli = &Client{
-			Conn:      conn,
-			News:      make(map[string]*proto_news.NewsItem),
-			Subscribe: nil,
-		}
-		a.clients[clientId] = cli
+		a.onCancelSub <- a.connectionsSub[connId]
 	}
-
-	cli.Subscribe = msg.Channels
-	a.onSubscribe <- msg.Channels
-
-	a.subscribe(conn, msg)
+	// Save the subscribe
+	a.connectionsSub[connId] = msg.Channels
+	// Subscribe the news
+	a.onSubscribe <- a.connectionsSub[connId]
+	// Subscribe the news in the handler
+	a.handler(conn).OnSubscribe(conn, msg)
 }
 func (a *agent) OnLeave(conn frontier.Conn) {
 	a.mutex.Lock()
 	defer a.mutex.Unlock()
 
-	clientId := conn.GetId()
-	cli, ok := a.clients[clientId]
+	connId := conn.GetId()
+	_, ok := a.connections[connId]
 	if !ok {
 		return
 	}
-	a.onCancel <- cli.Subscribe
-	index := conn.GetId() % a.parallel
-	a.handlers[index].OnLeave(conn)
+
+	// Cancel subscribe
+	a.onCancelSub <- a.connectionsSub[connId]
+	// Cancel subscribe in the handler
+	a.handler(conn).OnLeave(conn)
 }
 
 // 有新的消息，需要进行推送
@@ -115,7 +160,7 @@ func (a *agent) OnNews(data []byte) {
 	}
 }
 
-func (a *agent) subscribe(conn frontier.Conn, subscribe *proto_news.Subscribe) {
+func (a *agent) handler(conn frontier.Conn) *handler {
 	index := conn.GetId() % a.parallel
-	a.handlers[index].OnSubscribe(conn, subscribe)
+	return a.handlers[index]
 }

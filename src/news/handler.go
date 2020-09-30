@@ -66,8 +66,6 @@ func (n *handler) OnInit() {
 			case event := <-n.onSubscribe:
 				clientId, conn, message := event.Conn.GetId(), event.Conn, event.Message
 
-
-
 				cli, ok := n.clients[event.Conn.GetId()]
 				if !ok {
 					cli = &Client{

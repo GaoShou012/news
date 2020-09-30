@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v7"
 	"runtime"
 	"time"
 )

@@ -15,8 +15,6 @@ require (
 	github.com/cenkalti/backoff/v4 v4.0.0 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
-	github.com/coreos/bbolt v1.3.3 // indirect
-	github.com/coreos/etcd v3.3.22+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
@@ -55,7 +53,6 @@ require (
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/jinzhu/configor v1.2.0 // indirect
 	github.com/jinzhu/gorm v1.9.16
-	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/klauspost/compress v1.10.11 // indirect
 	github.com/klauspost/cpuid v1.2.3 // indirect
@@ -82,26 +79,22 @@ require (
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/prometheus/client_golang v1.7.0
+	github.com/prometheus/client_golang v1.7.1
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/procfs v0.1.3 // indirect
 	github.com/soheilhy/cmux v0.1.4 // indirect
-	github.com/tmc/grpc-websocket-proxy v0.0.0-20200122045848-3419fae592fc // indirect
 	github.com/ugorji/go v1.1.7 // indirect
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
-	go.etcd.io/bbolt v1.3.4 // indirect
-	go.uber.org/zap v1.15.0 // indirect
+	gitlab.cptprod.net/wchat-backend/im-lib v1.0.3 // indirect
 	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc // indirect
 	golang.org/x/sys v0.0.0-20200828081204-131dc92a58d5
 	golang.org/x/text v0.3.3 // indirect
-	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	google.golang.org/genproto v0.0.0-20200815001618-f69a88009b70 // indirect
-	google.golang.org/grpc v1.31.0 // indirect
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/yaml.v2 v2.3.0 // indirect
-	sigs.k8s.io/yaml v1.1.0 // indirect
 )
 
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
+
+replace github.com/coreos/bbolt v1.3.4 => go.etcd.io/bbolt v1.3.4

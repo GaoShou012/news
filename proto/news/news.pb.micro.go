@@ -42,8 +42,10 @@ func NewNewsServiceEndpoints() []*api.Endpoint {
 // Client API for NewsService service
 
 type NewsService interface {
+	Sub(ctx context.Context, in *SubReq, opts ...client.CallOption) (*SubRsp, error)
+	Cancel(ctx context.Context, in *CancelReq, opts ...client.CallOption) (*CancelRsp, error)
+	GetSubList(ctx context.Context, in *GetSubListReq, opts ...client.CallOption) (*GetSubListRsp, error)
 	GetNews(ctx context.Context, in *GetNewsReq, opts ...client.CallOption) (*GetNewsRsp, error)
-	SetNews(ctx context.Context, in *SetNewsReq, opts ...client.CallOption) (*SetNewsRsp, error)
 }
 
 type newsService struct {
@@ -58,6 +60,36 @@ func NewNewsService(name string, c client.Client) NewsService {
 	}
 }
 
+func (c *newsService) Sub(ctx context.Context, in *SubReq, opts ...client.CallOption) (*SubRsp, error) {
+	req := c.c.NewRequest(c.name, "NewsService.Sub", in)
+	out := new(SubRsp)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsService) Cancel(ctx context.Context, in *CancelReq, opts ...client.CallOption) (*CancelRsp, error) {
+	req := c.c.NewRequest(c.name, "NewsService.Cancel", in)
+	out := new(CancelRsp)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *newsService) GetSubList(ctx context.Context, in *GetSubListReq, opts ...client.CallOption) (*GetSubListRsp, error) {
+	req := c.c.NewRequest(c.name, "NewsService.GetSubList", in)
+	out := new(GetSubListRsp)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *newsService) GetNews(ctx context.Context, in *GetNewsReq, opts ...client.CallOption) (*GetNewsRsp, error) {
 	req := c.c.NewRequest(c.name, "NewsService.GetNews", in)
 	out := new(GetNewsRsp)
@@ -68,27 +100,21 @@ func (c *newsService) GetNews(ctx context.Context, in *GetNewsReq, opts ...clien
 	return out, nil
 }
 
-func (c *newsService) SetNews(ctx context.Context, in *SetNewsReq, opts ...client.CallOption) (*SetNewsRsp, error) {
-	req := c.c.NewRequest(c.name, "NewsService.SetNews", in)
-	out := new(SetNewsRsp)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for NewsService service
 
 type NewsServiceHandler interface {
+	Sub(context.Context, *SubReq, *SubRsp) error
+	Cancel(context.Context, *CancelReq, *CancelRsp) error
+	GetSubList(context.Context, *GetSubListReq, *GetSubListRsp) error
 	GetNews(context.Context, *GetNewsReq, *GetNewsRsp) error
-	SetNews(context.Context, *SetNewsReq, *SetNewsRsp) error
 }
 
 func RegisterNewsServiceHandler(s server.Server, hdlr NewsServiceHandler, opts ...server.HandlerOption) error {
 	type newsService interface {
+		Sub(ctx context.Context, in *SubReq, out *SubRsp) error
+		Cancel(ctx context.Context, in *CancelReq, out *CancelRsp) error
+		GetSubList(ctx context.Context, in *GetSubListReq, out *GetSubListRsp) error
 		GetNews(ctx context.Context, in *GetNewsReq, out *GetNewsRsp) error
-		SetNews(ctx context.Context, in *SetNewsReq, out *SetNewsRsp) error
 	}
 	type NewsService struct {
 		newsService
@@ -101,10 +127,18 @@ type newsServiceHandler struct {
 	NewsServiceHandler
 }
 
-func (h *newsServiceHandler) GetNews(ctx context.Context, in *GetNewsReq, out *GetNewsRsp) error {
-	return h.NewsServiceHandler.GetNews(ctx, in, out)
+func (h *newsServiceHandler) Sub(ctx context.Context, in *SubReq, out *SubRsp) error {
+	return h.NewsServiceHandler.Sub(ctx, in, out)
 }
 
-func (h *newsServiceHandler) SetNews(ctx context.Context, in *SetNewsReq, out *SetNewsRsp) error {
-	return h.NewsServiceHandler.SetNews(ctx, in, out)
+func (h *newsServiceHandler) Cancel(ctx context.Context, in *CancelReq, out *CancelRsp) error {
+	return h.NewsServiceHandler.Cancel(ctx, in, out)
+}
+
+func (h *newsServiceHandler) GetSubList(ctx context.Context, in *GetSubListReq, out *GetSubListRsp) error {
+	return h.NewsServiceHandler.GetSubList(ctx, in, out)
+}
+
+func (h *newsServiceHandler) GetNews(ctx context.Context, in *GetNewsReq, out *GetNewsRsp) error {
+	return h.NewsServiceHandler.GetNews(ctx, in, out)
 }
