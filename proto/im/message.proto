@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto.im;
 
-option go_package = "wchatv1/proto/im;im";
+option go_package = "news/proto/im;im";
 
 message Conn {
     uint64 Id = 1;
